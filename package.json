@@ -4,7 +4,9 @@
   "description": "Returns an up-to-date list of Wikipedia's vital articles (~1000 subjects every Wikipedia should have), by scraping the webpage.",
   "main": "main.js",
   "dependencies": {
-    "eslint": "^5.9.0"
+    "eslint": "^5.9.0",
+    "jsdom": "^13.0.0",
+    "node-fetch": "^2.2.1"
   },
   "devDependencies": {},
   "scripts": {

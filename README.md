@@ -10,7 +10,8 @@ See [Wikipedia:Vital articles](https://en.wikipedia.org/wiki/Wikipedia:Vital_art
 
 ## Requirements
 
-No external dependencies.
+- node-fetch
+- jsdom
 
 ## Contributing
 
