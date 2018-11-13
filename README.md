@@ -6,7 +6,7 @@ Get a list of Wikipedia's 1000 most important articles.
 
 Returns an up-to-date list of Wikipedia's vital articles (~1000 subjects every Wikipedia should have), by scraping the webpage.
 
-See [Wikipedia:Vital articles](https://en.wikipedia.org/wiki/Wikipedia:Vital_articles) for details on the list.
+Currently only works for the English version of wikipedia. See [Wikipedia:Vital articles](https://en.wikipedia.org/wiki/Wikipedia:Vital_articles) for details on the list.
 
 ## Requirements
 

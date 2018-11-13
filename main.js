@@ -4,10 +4,12 @@ const { JSDOM } = jsdom;
 
 fetchHTML = async function(url) {
   try {
+    // Fetch object from URL
     const response = await fetch(url);
+    // Extract HTML text from object
     const html = await response.text();
-    const dom = new JSDOM(html);
-    return dom;
+    // Return parse HTML text as DOM object
+    return new JSDOM(html);
   } catch (error) {
     console.log("Error fetching page: ", error);
     return null;
@@ -22,17 +24,17 @@ getListArticles = async function() {
   if (dom === null) return null;
 
   // Get first list element in TOC (Table of Contents) and save as an array
-  // List contains all categories and subcategories
+  // => List contains all categories and subcategories
   const toc = Array.from(
     dom.window.document.body.querySelector("#toc li ul").children
   );
 
   // Save basic data of all categories
-  let categories = [];
+  const categories = [];
   toc.forEach(item => {
     // Get all subcategories from TOC
     const subcategoryArray = Array.from(item.querySelector("ul").children);
-    let subcategories = [];
+    const subcategories = [];
     subcategoryArray.forEach(item => {
       // For each subcategory, save the name and HTML id
       const subcategoryName = item.querySelectorAll("a span")[1].textContent;
@@ -55,21 +57,31 @@ getListArticles = async function() {
     });
   });
 
-  allArticles = [];
+  // Save all articles as objects in array
+  const allArticles = [];
+
   categories.forEach(category => {
     category.subcategories.forEach(subcategory => {
-      articles = Array.from(
-        dom.window.document.querySelector(`[id="${subcategory.id}"]`).parentNode
-          .nextElementSibling.children
+      // Get all list elements which are siblings (or children of siblings) of the category header.
+      // => Most list elements correspond to a single article.
+      listItems = Array.from(
+        dom.window.document
+          .querySelector(`[id="${subcategory.id}"]`)
+          .parentNode.nextElementSibling.querySelectorAll("li")
       );
-      articles.forEach(article => {
-        const link = article.querySelector("a");
-        allArticles.push({
-          name: link.textContent,
-          url: "https://en.wikipedia.org" + link.href,
-          category: category.name,
-          subcategory: subcategory.name
-        });
+      listItems.forEach(item => {
+        // Ignore purely categorical list items, with no link to an article
+        if (Array.from(item.children).some(child => child.nodeName === "A")) {
+          // Select first anchor element only
+          const articleLink = item.querySelector("a");
+          // Extract article information into object and save in array
+          allArticles.push({
+            name: articleLink.title,
+            url: "https://en.wikipedia.org" + articleLink.href,
+            category: category.name,
+            subcategory: subcategory.name
+          });
+        }
       });
     });
   });
