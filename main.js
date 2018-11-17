@@ -99,4 +99,4 @@ const vitalArticles = async function() {
   return articles;
 };
 
-export default vitalArticles;
+module.exports = vitalArticles;
