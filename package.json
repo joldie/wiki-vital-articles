@@ -4,6 +4,7 @@
   "description": "Returns an up-to-date list of Wikipedia's vital articles (~1000 subjects every Wikipedia should have), by scraping the webpage.",
   "main": "main.js",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "jsdom": "^13.0.0",
     "node-fetch": "^2.2.1"
