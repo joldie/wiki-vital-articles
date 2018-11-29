@@ -1,12 +1,10 @@
 {
-  "name": "wikipedia-vital-articles",
+  "name": "wiki-vital-articles",
   "version": "1.0.0",
-  "description": "Get a list of Wikipedia's 1000 most important articles",
+  "description": "Get a list of Wikipedia's ~1000 most important articles",
   "main": "main.js",
   "bin": "cli.js",
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.16.4",
     "jsdom": "^13.0.0",
     "meow": "^5.0.0",
     "node-fetch": "^2.2.1"
@@ -19,10 +17,10 @@
     "test": "jest"
   },
   "author": "joldie",
-  "homepage": "https://github.com/joldie/wikipedia-vital-articles",
+  "homepage": "https://github.com/joldie/wiki-vital-articles",
   "repository": {
     "type": "git",
-    "url": "https://github.com/joldie/wikipedia-vital-articles.git"
+    "url": "https://github.com/joldie/wiki-vital-articles.git"
   },
   "license": "GPL-3.0"
 }
