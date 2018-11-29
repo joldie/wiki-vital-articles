@@ -22,7 +22,7 @@ const wikiVitalArticles = require("wiki-vital-articles");
 wikiVitalArticles().then(articles => {
   articles.forEach(article => {
     console.log(article.name);
-  }
+  });
 });
 ```
 
