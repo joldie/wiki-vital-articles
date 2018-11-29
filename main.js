@@ -12,7 +12,7 @@ const vitalArticlesUrl =
  * Main function
  * @return {Array} Array of objects representing all of Wikipedia's "vital articles"
  */
-const vitalArticles = async function() {
+module.exports = async function() {
   // Get HTML text from URL
   const htmlText = await getHtml(vitalArticlesUrl);
   if (htmlText === null) return null;
@@ -137,5 +137,3 @@ const urlLeftPart = function(url) {
   // Search for next forward slash after protocol text and return substring up to that position
   return url.substr(0, url.indexOf("/", "https://".length));
 };
-
-module.exports = vitalArticles;

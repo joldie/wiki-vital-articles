@@ -1,5 +1,5 @@
 const fetch = require("node-fetch");
-const vitalArticles = require("../main");
+const vitalArticles = require("./main");
 
 // Run async function once only, then run relevant tests on retrieved data
 let articles;
