@@ -1,6 +1,6 @@
 {
   "name": "wiki-vital-articles",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Get a list of Wikipedia's ~1000 most important articles",
   "main": "main.js",
   "bin": "cli.js",

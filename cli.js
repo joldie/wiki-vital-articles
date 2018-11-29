@@ -47,25 +47,25 @@ wikiVitalArticles().then(articles => {
   articles.forEach((article, indexZeroBased) => {
     let index = indexZeroBased + 1;
     if (cli.flags.v || cli.flags.verbose) {
-      console.log(index + "." + spaces(index, 4) + "Name:     " + article.name);
+      console.log(index + "." + spaces(index, 6) + "Name:     " + article.name);
       console.log(
         "      Category: " + article.category + " / " + article.subcategory
       );
       console.log("      URL:      " + article.url);
     } else {
-      console.log(index + "." + spaces(index, 4) + article.name);
+      console.log(index + "." + spaces(index, 6) + article.name);
     }
   });
 });
 
 /**
  * Returns a string of space characters to insert after index number so that
- * verbose text is formatted vertically aligned, regardless of digits in index number
+ * verbose text is formatted vertically aligned, regardless of digits in index
  * @param  {Number} number      Current index number
- * @param  {Number} extraSpaces Number of extra spaces to append
+ * @param  {Number} totalChars  Desired total number of characters
  */
-const spaces = (number, extraSpaces) => {
-  return Array(String(number).length + extraSpaces).join(" ");
+const spaces = (number, totalChars) => {
+  return Array(totalChars - String(number).length).join(" ");
 };
 
 /**
