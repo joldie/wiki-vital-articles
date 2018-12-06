@@ -60,7 +60,7 @@ Usage
     --verbose, -v   Print verbose output of all articles, including category and URL
 
   Examples
-	  $ wiki-vital-articles
+    $ wiki-vital-articles
     1.    Hammurabi
     2.    Hatshepsut
     3.    Ramesses II
