@@ -5,13 +5,13 @@
   "main": "main.js",
   "bin": "cli.js",
   "dependencies": {
-    "jsdom": "^13.0.0",
+    "jsdom": "^27.0.1",
     "meow": "^5.0.0",
     "node-fetch": "^2.2.1"
   },
   "devDependencies": {
     "eslint": "^5.9.0",
-    "jest": "^23.6.0"
+    "jest": "^30.2.0"
   },
   "scripts": {
     "test": "jest"
