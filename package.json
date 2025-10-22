@@ -10,7 +10,7 @@
     "node-fetch": "^2.2.1"
   },
   "devDependencies": {
-    "eslint": "^5.9.0",
+    "eslint": "^9.38.0",
     "jest": "^23.6.0"
   },
   "scripts": {
