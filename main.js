@@ -18,8 +18,13 @@ const wikiVitalArticles = async () => {
   if (dom === null) return null;
 
   // Get first section of TOC (Table of Contents), which is a list of all article categories
-  const toc = getTocCategoryItems(dom.window.document.body.querySelector("#toc"));
-  if (toc === null) return null;
+  const tocList =
+    dom.window.document.body.querySelector("#toc li ul") ??
+    dom.window.document.body.querySelector("#toc > ul");
+  if (tocList === null) return null;
+  const toc = Array.from(tocList.children).filter(item =>
+    item.querySelector("ul")
+  );
 
   // Parse all categories (and subcategories) into an array of objects
   const categories = getCategoriesFromToC(toc);
@@ -97,26 +102,14 @@ const getCategoriesFromToC = function(toc) {
   const categories = [];
   toc.forEach(item => {
     // Get all subcategories from TOC
-    const subcategoryList = item.querySelector("ul");
-    if (subcategoryList === null) {
-      return;
-    }
-    const subcategoryArray = Array.from(subcategoryList.children);
+    const subcategoryArray = Array.from(item.querySelector("ul").children);
     const subcategories = [];
     subcategoryArray.forEach(item => {
       // For each subcategory, save the name and HTML id
-      const subcategoryAnchor = item.querySelector("a");
-      if (subcategoryAnchor === null) {
-        return;
-      }
-      const subcategorySpans = subcategoryAnchor.querySelectorAll("span");
-      if (subcategorySpans.length < 2) {
-        return;
-      }
-      const subcategoryName = normalizeName(subcategorySpans[1].textContent);
-      const subcategoryId = subcategoryAnchor.href;
+      const subcategoryName = item.querySelectorAll("a span")[1].textContent;
+      const subcategoryId = item.querySelector("a").href;
       subcategories.push({
-        name: subcategoryName,
+        name: subcategoryName.substring(0, subcategoryName.indexOf(" (")),
         id: subcategoryId.substring(
           subcategoryId.indexOf("#") + 1,
           subcategoryId.length
@@ -124,18 +117,10 @@ const getCategoriesFromToC = function(toc) {
       });
     });
     // For each category, save the name, HTML id and array of subcategories
-    const anchor = item.querySelector("a");
-    if (anchor === null) {
-      return;
-    }
-    const categorySpans = anchor.querySelectorAll("span");
-    if (categorySpans.length < 2) {
-      return;
-    }
-    const categoryName = normalizeName(categorySpans[1].textContent);
-    const categoryId = anchor.href;
+    const categoryName = item.querySelectorAll("a span")[1].textContent;
+    const categoryId = item.querySelector("a").href;
     categories.push({
-      name: categoryName,
+      name: categoryName.substring(0, categoryName.indexOf(" (")),
       id: categoryId.substring(categoryId.indexOf("#") + 1, categoryId.length),
       subcategories: subcategories
     });
@@ -152,46 +137,4 @@ const getCategoriesFromToC = function(toc) {
 const urlLeftPart = function(url) {
   // Search for next forward slash after protocol text and return substring up to that position
   return url.substr(0, url.indexOf("/", "https://".length));
-};
-
-/**
- * Extract the list elements that represent article categories from the table of contents.
- * The structure of Wikipedia's table of contents occasionally changes, so we try a couple
- * of different layouts before giving up.
- * @param {HTMLElement|null} tocRoot Root element of the table of contents
- * @return {Array|null} Array with TOC elements as HTML DOM objects or null if none found
- */
-const getTocCategoryItems = function(tocRoot) {
-  if (tocRoot === null) {
-    return null;
-  }
-
-  // In the previous layout the categories were stored inside the first list item.
-  const legacyList = tocRoot.querySelector("ul > li > ul");
-  if (legacyList !== null) {
-    return Array.from(legacyList.children);
-  }
-
-  // Current layout keeps the categories as direct children of the first unordered list.
-  const primaryList = tocRoot.querySelector("ul");
-  if (primaryList !== null) {
-    const categoryItems = Array.from(primaryList.children).filter(item =>
-      item.querySelector("ul")
-    );
-    if (categoryItems.length > 0) {
-      return categoryItems;
-    }
-  }
-
-  return null;
-};
-
-/**
- * Remove trailing metadata (e.g. "(10 articles)") from a heading text.
- * @param {string} name Raw heading text
- * @return {string} Cleaned heading text
- */
-const normalizeName = function(name) {
-  const parenIndex = name.indexOf(" (");
-  return parenIndex === -1 ? name : name.substring(0, parenIndex);
 };
