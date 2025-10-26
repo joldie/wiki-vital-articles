@@ -9,13 +9,24 @@ const vitalArticlesUrl =
  * @return {Array} Array of objects representing all of Wikipedia's "vital articles"
  */
 const wikiVitalArticles = async () => {
-  // Get HTML text from URL
-  const htmlText = await getHtml(vitalArticlesUrl);
-  if (htmlText === null) return null;
+  let htmlText;
+  try {
+    // Get HTML text from URL
+    htmlText = await getHtml(vitalArticlesUrl);
+  } catch (error) {
+    throw new Error(
+      `Unable to download vital articles page at ${vitalArticlesUrl}`,
+      { cause: error }
+    );
+  }
 
-  // Parse HTML text into JSON DOM object
-  const dom = parseHtmlDom(htmlText);
-  if (dom === null) return null;
+  let dom;
+  try {
+    // Parse HTML text into JSON DOM object
+    dom = parseHtmlDom(htmlText);
+  } catch (error) {
+    throw new Error("Unable to parse vital articles page", { cause: error });
+  }
 
   // Get first section of TOC (Table of Contents), which is a list of all article categories
   const toc = Array.from(
@@ -63,14 +74,25 @@ export default wikiVitalArticles;
  * @return {string} HTML text of webpage
  */
 const getHtml = async function(url) {
+  let response;
   try {
     // Fetch object from URL
-    const response = await fetch(url);
+    response = await fetch(url);
+  } catch (error) {
+    throw new Error(`Failed to fetch \"${url}\"`, { cause: error });
+  }
+
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch \"${url}\" (status: ${response.status} ${response.statusText})`
+    );
+  }
+
+  try {
     // Return HTML text from object
     return await response.text();
   } catch (error) {
-    console.log("Error fetching page: ", error);
-    return null;
+    throw new Error(`Failed to read response from \"${url}\"`, { cause: error });
   }
 };
 
@@ -83,8 +105,7 @@ const parseHtmlDom = function(htmlText) {
   try {
     return new JSDOM(htmlText);
   } catch (error) {
-    console.log("Error parsing HTML DOM: ", error);
-    return null;
+    throw new Error("Failed to parse HTML into DOM", { cause: error });
   }
 };
 
