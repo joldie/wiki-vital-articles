@@ -13,5 +13,7 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-      - run: npm ci
-      - run: npx vitest run --reporter=dot
+      - name: Install dependencies
+        run: npm install
+      - name: Run tests
+        run: npx vitest run --reporter=dot
