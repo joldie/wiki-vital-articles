@@ -18,8 +18,12 @@ const wikiVitalArticles = async () => {
   if (dom === null) return null;
 
   // Get first section of TOC (Table of Contents), which is a list of all article categories
-  const toc = Array.from(
-    dom.window.document.body.querySelector("#toc li ul").children
+  const tocList =
+    dom.window.document.body.querySelector("#toc li ul") ??
+    dom.window.document.body.querySelector("#toc > ul");
+  if (tocList === null) return null;
+  const toc = Array.from(tocList.children).filter(item =>
+    item.querySelector("ul")
   );
 
   // Parse all categories (and subcategories) into an array of objects
