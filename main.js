@@ -1,8 +1,4 @@
-"use strict";
-
-const fetch = require("node-fetch");
-const jsdom = require("jsdom");
-const { JSDOM } = jsdom;
+import { JSDOM } from "jsdom";
 
 // Webpage URL of English Wikipedia's list of "Vital Articles"
 const vitalArticlesUrl =
@@ -12,7 +8,7 @@ const vitalArticlesUrl =
  * Main function
  * @return {Array} Array of objects representing all of Wikipedia's "vital articles"
  */
-module.exports = async function() {
+const wikiVitalArticles = async () => {
   // Get HTML text from URL
   const htmlText = await getHtml(vitalArticlesUrl);
   if (htmlText === null) return null;
@@ -59,6 +55,8 @@ module.exports = async function() {
   return articles;
 };
 
+export default wikiVitalArticles;
+
 /**
  * Fetch HTML text from webpage and parse into JSON DOM object
  * @param {string} url URL of webpage
@@ -100,7 +98,6 @@ const getCategoriesFromToC = function(toc) {
   const categories = [];
   toc.forEach(item => {
     // Get all subcategories from TOC
-    //const subcategoryArray = Array.from(item.querySelector("ul").children);
     const subcategoryArray = Array.from(item.querySelector("ul").children);
     const subcategories = [];
     subcategoryArray.forEach(item => {

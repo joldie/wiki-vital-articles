@@ -2,19 +2,21 @@
   "name": "wiki-vital-articles",
   "version": "0.1.0",
   "description": "Get a list of Wikipedia's ~1000 most important articles",
+  "type": "module",
   "main": "main.js",
   "bin": "cli.js",
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
-    "jsdom": "^13.0.0",
-    "meow": "^5.0.0",
-    "node-fetch": "^2.2.1"
+    "jsdom": "^24.0.0",
+    "meow": "^12.1.1"
   },
   "devDependencies": {
-    "eslint": "^5.9.0",
-    "jest": "^23.6.0"
+    "vitest": "^1.6.0"
   },
   "scripts": {
-    "test": "jest"
+    "test": "vitest run"
   },
   "author": "joldie",
   "homepage": "https://github.com/joldie/wiki-vital-articles",

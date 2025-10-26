@@ -1,10 +1,10 @@
-const fetch = require("node-fetch");
-const vitalArticles = require("./main");
+import { beforeAll, expect, test } from "vitest";
+import wikiVitalArticles from "./main.js";
 
 // Run async function once only, then run relevant tests on retrieved data
 let articles;
 beforeAll(async () => {
-  articles = await vitalArticles();
+  articles = await wikiVitalArticles();
 });
 
 // Tests

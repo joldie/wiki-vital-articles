@@ -1,21 +1,20 @@
 #!/usr/bin/env node
 
-"use strict";
+import meow from "meow";
+import wikiVitalArticles from "./main.js";
 
-const meow = require("meow");
-const wikiVitalArticles = require("./main");
-
-const cli = meow(`
+const cli = meow(
+  `
   Usage
     $ wiki-vital-articles [num] [options]
-  
+
   Options
       num           Optional integer specifying maximum number of articles to print
     --random, -r    Print articles from list in random order
     --verbose, -v   Print verbose output of all articles, including category and URL
 
   Examples
-	  $ wiki-vital-articles
+          $ wiki-vital-articles
     1.    Hammurabi
     2.    Hatshepsut
     3.    Ramesses II
@@ -29,33 +28,37 @@ const cli = meow(`
           Category: People / Writers
           URL:      https://en.wikipedia.org/wiki/Johann_Wolfgang_von_Goethe
 
-`);
+`,
+  {
+    importMeta: import.meta
+  }
+);
 
-wikiVitalArticles().then(articles => {
-  if (cli.flags.r || cli.flags.random) {
-    // Randomise order of articles in array
-    shuffleArray(articles);
+const articles = await wikiVitalArticles();
+
+if (cli.flags.r || cli.flags.random) {
+  // Randomise order of articles in array
+  shuffleArray(articles);
+}
+if (cli.input[0] !== "") {
+  // If an integer passed as argument, reduce number of items in array to equal it
+  const num = parseInt(cli.input[0]);
+  if (!Number.isNaN(num) && num < articles.length) {
+    articles.splice(0, articles.length - num);
   }
-  if (cli.input[0] !== "") {
-    // If an integer passed as argument, reduce number of items in array to equal it
-    let num = parseInt(cli.input[0]);
-    if (!isNaN(num) && num < articles.length) {
-      articles.splice(0, articles.length - num);
-    }
+}
+// Print information for each article in array
+articles.forEach((article, indexZeroBased) => {
+  const index = indexZeroBased + 1;
+  if (cli.flags.v || cli.flags.verbose) {
+    console.log(index + "." + spaces(index, 6) + "Name:     " + article.name);
+    console.log(
+      "      Category: " + article.category + " / " + article.subcategory
+    );
+    console.log("      URL:      " + article.url);
+  } else {
+    console.log(index + "." + spaces(index, 6) + article.name);
   }
-  // Print information for each article in array
-  articles.forEach((article, indexZeroBased) => {
-    let index = indexZeroBased + 1;
-    if (cli.flags.v || cli.flags.verbose) {
-      console.log(index + "." + spaces(index, 6) + "Name:     " + article.name);
-      console.log(
-        "      Category: " + article.category + " / " + article.subcategory
-      );
-      console.log("      URL:      " + article.url);
-    } else {
-      console.log(index + "." + spaces(index, 6) + article.name);
-    }
-  });
 });
 
 /**
