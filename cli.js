@@ -3,8 +3,10 @@
 import meow from "meow";
 import wikiVitalArticles from "./main.js";
 
-const cli = meow(
-  `
+const main = async () => {
+  try {
+    const cli = meow(
+      `
   Usage
     $ wiki-vital-articles [num] [options]
 
@@ -29,37 +31,47 @@ const cli = meow(
           URL:      https://en.wikipedia.org/wiki/Johann_Wolfgang_von_Goethe
 
 `,
-  {
-    importMeta: import.meta
-  }
-);
-
-const articles = await wikiVitalArticles();
-
-if (cli.flags.r || cli.flags.random) {
-  // Randomise order of articles in array
-  shuffleArray(articles);
-}
-if (cli.input[0] !== "") {
-  // If an integer passed as argument, reduce number of items in array to equal it
-  const num = parseInt(cli.input[0]);
-  if (!Number.isNaN(num) && num < articles.length) {
-    articles.splice(0, articles.length - num);
-  }
-}
-// Print information for each article in array
-articles.forEach((article, indexZeroBased) => {
-  const index = indexZeroBased + 1;
-  if (cli.flags.v || cli.flags.verbose) {
-    console.log(index + "." + spaces(index, 6) + "Name:     " + article.name);
-    console.log(
-      "      Category: " + article.category + " / " + article.subcategory
+      {
+        importMeta: import.meta
+      }
     );
-    console.log("      URL:      " + article.url);
-  } else {
-    console.log(index + "." + spaces(index, 6) + article.name);
+
+    const articles = await wikiVitalArticles();
+
+    if (cli.flags.r || cli.flags.random) {
+      // Randomise order of articles in array
+      shuffleArray(articles);
+    }
+    if (cli.input[0] !== "") {
+      // If an integer passed as argument, reduce number of items in array to equal it
+      const num = parseInt(cli.input[0]);
+      if (!Number.isNaN(num) && num < articles.length) {
+        articles.splice(0, articles.length - num);
+      }
+    }
+    // Print information for each article in array
+    articles.forEach((article, indexZeroBased) => {
+      const index = indexZeroBased + 1;
+      if (cli.flags.v || cli.flags.verbose) {
+        console.log(
+          index + "." + spaces(index, 6) + "Name:     " + article.name
+        );
+        console.log(
+          "      Category: " + article.category + " / " + article.subcategory
+        );
+        console.log("      URL:      " + article.url);
+      } else {
+        console.log(index + "." + spaces(index, 6) + article.name);
+      }
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error(message);
+    process.exitCode = 1;
   }
-});
+};
+
+await main();
 
 /**
  * Returns a string of space characters to insert after index number so that
